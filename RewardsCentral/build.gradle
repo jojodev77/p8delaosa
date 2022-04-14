@@ -6,38 +6,36 @@ plugins {
 
 group = 'RewardsCentral '
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = '1.8'
 
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
-}
+
 
 repositories {
 	mavenCentral()
+	flatDir {
+        dirs 'libs'
+    }
 }
 
 ext {
 	set('springCloudVersion', "2021.0.1")
-	set('testcontainersVersion', "1.16.2")
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.testcontainers:junit-jupiter'
+  implementation 'org.springframework.boot:spring-boot-starter-actuator'
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+  implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+  implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+  //SPRING CLOUD CONFIG
+  implementation 'org.springframework.cloud:spring-cloud-starter-config'
+  implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+  implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+  compileOnly 'org.projectlombok:lombok'
+  annotationProcessor 'org.projectlombok:lombok'
 }
 
 dependencyManagement {
 	imports {
-		mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
 	}
 }

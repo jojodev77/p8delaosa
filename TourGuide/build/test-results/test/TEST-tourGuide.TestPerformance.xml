@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="tourGuide.TestPerformance" tests="2" skipped="2" failures="0" errors="0" timestamp="2022-04-09T22:33:03" hostname="LGOP2745" time="0.0">
+<testsuite name="tourGuide.TestPerformance" tests="2" skipped="2" failures="0" errors="0" timestamp="2022-04-13T19:50:00" hostname="LGOP2745" time="0.001">
   <properties/>
-  <testcase name="highVolumeTrackLocation" classname="tourGuide.TestPerformance" time="0.0">
+  <testcase name="highVolumeTrackLocation" classname="tourGuide.TestPerformance" time="0.001">
     <skipped/>
   </testcase>
   <testcase name="highVolumeGetRewards" classname="tourGuide.TestPerformance" time="0.0">

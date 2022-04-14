@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="tourGuide.TestRewardsService" tests="3" skipped="1" failures="1" errors="0" timestamp="2022-04-09T22:33:03" hostname="LGOP2745" time="0.337">
+<testsuite name="tourGuide.TestRewardsService" tests="3" skipped="1" failures="1" errors="0" timestamp="2022-04-13T19:50:00" hostname="LGOP2745" time="0.395">
   <properties/>
   <testcase name="nearAllAttractions" classname="tourGuide.TestRewardsService" time="0.0">
     <skipped/>
   </testcase>
-  <testcase name="userGetRewards" classname="tourGuide.TestRewardsService" time="0.321">
-    <failure message="java.lang.NumberFormatException: For input string: &quot;-173,762645&quot;" type="java.lang.NumberFormatException">java.lang.NumberFormatException: For input string: &quot;-173,762645&quot;
+  <testcase name="userGetRewards" classname="tourGuide.TestRewardsService" time="0.38">
+    <failure message="java.lang.NumberFormatException: For input string: &quot;-162,264555&quot;" type="java.lang.NumberFormatException">java.lang.NumberFormatException: For input string: &quot;-162,264555&quot;
 	at java.base/jdk.internal.math.FloatingDecimal.readJavaFormatString(FloatingDecimal.java:2054)
 	at java.base/jdk.internal.math.FloatingDecimal.parseDouble(FloatingDecimal.java:110)
 	at java.base/java.lang.Double.parseDouble(Double.java:543)
@@ -61,16 +61,16 @@
 	at java.base/java.lang.Thread.run(Thread.java:834)
 </failure>
   </testcase>
-  <testcase name="isWithinAttractionProximity" classname="tourGuide.TestRewardsService" time="0.013"/>
-  <system-out><![CDATA[00:33:04.043 [Test worker] INFO tourGuide.service.TourGuideService - TestMode enabled
-00:33:04.050 [Test worker] DEBUG tourGuide.service.TourGuideService - Initializing users
-00:33:04.053 [Test worker] DEBUG tourGuide.service.TourGuideService - Created 0 internal test users.
-00:33:04.054 [Test worker] DEBUG tourGuide.service.TourGuideService - Finished initializing users
-00:33:04.064 [pool-1-thread-1] DEBUG tourGuide.tracker.Tracker - Begin Tracker. Tracking 0 users.
-00:33:04.065 [pool-1-thread-1] DEBUG tourGuide.tracker.Tracker - Tracker Time Elapsed: 0 seconds.
-00:33:04.065 [pool-1-thread-1] DEBUG tourGuide.tracker.Tracker - Tracker sleeping
+  <testcase name="isWithinAttractionProximity" classname="tourGuide.TestRewardsService" time="0.012"/>
+  <system-out><![CDATA[21:50:01.144 [Test worker] INFO tourGuide.service.TourGuideService - TestMode enabled
+21:50:01.152 [Test worker] DEBUG tourGuide.service.TourGuideService - Initializing users
+21:50:01.155 [Test worker] DEBUG tourGuide.service.TourGuideService - Created 0 internal test users.
+21:50:01.155 [Test worker] DEBUG tourGuide.service.TourGuideService - Finished initializing users
+21:50:01.168 [pool-1-thread-1] DEBUG tourGuide.tracker.Tracker - Begin Tracker. Tracking 0 users.
+21:50:01.170 [pool-1-thread-1] DEBUG tourGuide.tracker.Tracker - Tracker Time Elapsed: 0 seconds.
+21:50:01.170 [pool-1-thread-1] DEBUG tourGuide.tracker.Tracker - Tracker sleeping
 ]]></system-out>
-  <system-err><![CDATA[avr. 10, 2022 12:33:04 AM org.javamoney.moneta.DefaultMonetaryContextFactory createMonetaryContextNonNullConfig
+  <system-err><![CDATA[avr. 13, 2022 9:50:01 PM org.javamoney.moneta.DefaultMonetaryContextFactory createMonetaryContextNonNullConfig
 INFOS: Using custom MathContext: precision=256, roundingMode=HALF_EVEN
 ]]></system-err>
 </testsuite>

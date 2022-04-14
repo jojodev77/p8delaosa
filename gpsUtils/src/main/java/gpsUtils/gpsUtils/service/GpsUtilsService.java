@@ -7,8 +7,15 @@ import org.springframework.stereotype.Service;
 
 
 
+
+
 @Service
 public class GpsUtilsService {
-	private final GpsUtil gpsUtil;
+
+
+
+ public  String test() {
+    return "message from proxy test";
+  }
 
 }
