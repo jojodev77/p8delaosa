@@ -1,22 +1,18 @@
 server:
-port: 8080
+  port: 8084
 
 eureka:
-client:
-serviceUrl:
-defaultZone: http://localhost:8083/eureka
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    service-url:
+      defaultZone: http://localhost:8083/eureka
 
 spring:
-application:
-name: TourServiceGateway
-cloud:
-gateway:
-routes:
-  - id: employeeModule
-  uri: lb://gpsUtils
-  predicates:
-  - Path=/test/**
-  - id: consumerModule
-uri: lb://Rewards
-predicates:
-  - Path=/test2/**
+  cloud:
+    gateway:
+      routes:
+        - id: employeeModule
+          uri: http://localhost:8081/
+          predicates:
+            - Path=/test/**

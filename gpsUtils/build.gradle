@@ -29,10 +29,11 @@ dependencies {
   //SPRING CLOUD CONFIG
   implementation 'org.springframework.cloud:spring-cloud-starter-config'
   implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
-  runtimeOnly 'mysql:mysql-connector-java'
   implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
   compileOnly 'org.projectlombok:lombok'
   annotationProcessor 'org.projectlombok:lombok'
+  implementation('org.springframework.boot:spring-boot-starter-jdbc')
+  runtimeOnly('com.h2database:h2')
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
