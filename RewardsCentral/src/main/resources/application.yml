@@ -1,15 +1,9 @@
-
 spring:
-application:
-  name: RewardsCentral
-  server:
-    port: 8082
+  application:
+    name: Reward central application
+server:
+  port: 8082
 eureka:
   client:
-    registerWithEureka: false
-    fetchRegistry: false
-    service-url:
+    serviceUrl:
       defaultZone: http://localhost:8083/eureka
-  instance:
-    hostname: localhost
-
