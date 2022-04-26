@@ -33,6 +33,7 @@ dependencies {
   implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
   implementation group: 'org.javamoney', name: 'moneta', version: '1.3'
   implementation group: 'com.jsoniter', name: 'jsoniter', version: '0.9.23'
+  implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-feign', version: '1.4.7.RELEASE'
   compileOnly 'org.projectlombok:lombok'
   annotationProcessor 'org.projectlombok:lombok'
   implementation('org.springframework.boot:spring-boot-starter-jdbc')
@@ -75,7 +76,6 @@ task jacocoRootReport(type: JacocoReport, group: 'Coverage reports') {
     html.required = true
   }
 }
-
 
 
 tasks.named('test') {

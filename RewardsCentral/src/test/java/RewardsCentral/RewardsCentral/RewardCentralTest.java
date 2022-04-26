@@ -1,13 +1,14 @@
 package RewardsCentral.RewardsCentral;
 
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class RewardsCentralApplicationTests {
+class RewardCentralTests {
 
-	@Test
-	void contextLoads() {
-	}
+  @Test
+  void contextLoads() {
+  }
 
 }

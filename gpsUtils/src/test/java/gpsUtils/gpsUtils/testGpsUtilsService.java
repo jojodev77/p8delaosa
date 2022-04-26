@@ -34,9 +34,7 @@ public class testGpsUtilsService {
     GpsUtilsService tourGuideService = new GpsUtilsService(gpsUtil);
     User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
 
-    System.out.println("dsfghjkfdghj" + gpsUtil.getUserLocation(user.getUserId()));
     VisitedLocation visitedLocation = tourGuideService.trackUserLocation(user);
-    System.out.println("----------------------------------------------------" + visitedLocation);
     tourGuideService.tracker.stopTracking();
     assertTrue(visitedLocation.userId.equals(user.getUserId()));
   }

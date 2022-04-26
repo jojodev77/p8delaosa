@@ -75,8 +75,13 @@ public class RewardCentralService {
   public void calculateRewards(User user) {
     List<VisitedLocation> userLocations = user.getVisitedLocations();
     List<Attraction> attractions = gpsUtil.getAttractions();
-
+    if (userLocations.isEmpty()) {
+      new RuntimeException("userLocation is empty");
+    }
     for(VisitedLocation visitedLocation : userLocations) {
+      if (attractions.isEmpty()) {
+        new RuntimeException("attractions is empty");
+      }
       for(Attraction attraction : attractions) {
         if(user.getUserRewards().stream().filter(r -> r.attraction.attractionName.equals(attraction.attractionName)).count() == 0) {
           if(nearAttraction(visitedLocation, attraction)) {
@@ -86,7 +91,9 @@ public class RewardCentralService {
       }
     }
   }
-
+  public List<UserReward> getUserRewards(User user) {
+    return user.getUserRewards();
+  }
   public boolean isWithinAttractionProximity(Attraction attraction, Location location) {
     return getDistance(attraction, location) > attractionProximityRange ? false : true;
   }
@@ -98,6 +105,9 @@ public class RewardCentralService {
   private int getRewardPoints(Attraction attraction, User user) {
     return rewardsCentral.getAttractionRewardPoints(attraction.attractionId, user.getUserId());
   }
+
+
+
 
   public double getDistance(Location loc1, Location loc2) {
     double lat1 = Math.toRadians(loc1.latitude);
@@ -124,13 +134,15 @@ public class RewardCentralService {
   public List<Attraction> getNearByAttractions(VisitedLocation visitedLocation) {
     List<Attraction> nearbyAttractions = new ArrayList<>();
     for(Attraction attraction : gpsUtil.getAttractions()) {
-      //  if(rewardsService.isWithinAttractionProximity(attraction, visitedLocation.location)) {
-      //    nearbyAttractions.add(attraction);
-      //  }
+        if(isWithinAttractionProximity(attraction, visitedLocation.location)) {
+          nearbyAttractions.add(attraction);
+        }
     }
 
     return nearbyAttractions;
   }
+
+
 
   /**********************************************************************************
    *
