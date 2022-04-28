@@ -50,6 +50,11 @@ public class RewardCentralService {
     addShutDownHook();
   }
 
+  /**
+   * @Description method for know the location of the place visited
+   * @param user
+   * @return
+   */
   public VisitedLocation trackUserLocation(User user) {
     if (user == null) {
       new RuntimeException("user is null");
@@ -60,10 +65,18 @@ public class RewardCentralService {
     return visitedLocation;
   }
 
+  /**
+   * @Description get list of user
+   * @return
+   */
   public List<User> getAllUsers() {
     return internalUserMap.values().stream().collect(Collectors.toList());
   }
 
+  /**
+   * @Description method for  indicates the distance to the nearest attraction
+   * @param proximityBuffer
+   */
   public void setProximityBuffer(int proximityBuffer) {
     this.proximityBuffer = proximityBuffer;
   }
@@ -72,7 +85,14 @@ public class RewardCentralService {
     proximityBuffer = defaultProximityBuffer;
   }
 
+  /**
+   * @Description method for calculate the number of rewards according to the places visited
+   * @param user
+   */
   public void calculateRewards(User user) {
+    if (user == null) {
+      new RuntimeException("user is null");
+    }
     List<VisitedLocation> userLocations = user.getVisitedLocations();
     List<Attraction> attractions = gpsUtil.getAttractions();
     if (userLocations.isEmpty()) {
@@ -85,31 +105,72 @@ public class RewardCentralService {
       for(Attraction attraction : attractions) {
         if(user.getUserRewards().stream().filter(r -> r.attraction.attractionName.equals(attraction.attractionName)).count() == 0) {
           if(nearAttraction(visitedLocation, attraction)) {
+            System.out.println("test");
             user.addUserReward(new UserReward(visitedLocation, attraction, getRewardPoints(attraction, user)));
           }
         }
       }
     }
   }
+
+  /**
+   * @Decsription method for get reward for a user
+   * @param user
+   * @return
+   */
   public List<UserReward> getUserRewards(User user) {
+    if (user == null) {
+      new RuntimeException("User is null");
+    }
     return user.getUserRewards();
   }
+
+  /**
+   * @Description method for calcul distance of attrraction since user localization
+   * @param attraction
+   * @param location
+   * @return
+   */
   public boolean isWithinAttractionProximity(Attraction attraction, Location location) {
+    if (attraction == null || location == null) {
+      new RuntimeException("attraction or location is null");
+    }
     return getDistance(attraction, location) > attractionProximityRange ? false : true;
   }
 
+  /**
+   * @Description method to know if you are near an attraction
+   * @param visitedLocation
+   * @param attraction
+   * @return
+   */
   private boolean nearAttraction(VisitedLocation visitedLocation, Attraction attraction) {
     return getDistance(attraction, visitedLocation.location) > proximityBuffer ? false : true;
   }
 
+  /**
+   * @Description for calcul number of point with attraction visited
+   * @param attraction
+   * @param user
+   * @return
+   */
   private int getRewardPoints(Attraction attraction, User user) {
+    if (attraction == null || user == null) {
+      new RuntimeException("attraction or user is null");
+    }
     return rewardsCentral.getAttractionRewardPoints(attraction.attractionId, user.getUserId());
   }
 
-
-
-
+  /**
+   * @Description method for calculate distance
+   * @param loc1
+   * @param loc2
+   * @return
+   */
   public double getDistance(Location loc1, Location loc2) {
+    if (loc1 == null || loc2 == null) {
+      new RuntimeException("location is null");
+    }
     double lat1 = Math.toRadians(loc1.latitude);
     double lon1 = Math.toRadians(loc1.longitude);
     double lat2 = Math.toRadians(loc2.latitude);
@@ -123,6 +184,9 @@ public class RewardCentralService {
     return statuteMiles;
   }
 
+  /**
+   * @Description method for activation runtIme with new Thread
+   */
   private void addShutDownHook() {
     Runtime.getRuntime().addShutdownHook(new Thread() {
       public void run() {
@@ -131,6 +195,11 @@ public class RewardCentralService {
     });
   }
 
+  /**
+   * @Decsription method for get list of attraction to near
+   * @param visitedLocation
+   * @return
+   */
   public List<Attraction> getNearByAttractions(VisitedLocation visitedLocation) {
     List<Attraction> nearbyAttractions = new ArrayList<>();
     for(Attraction attraction : gpsUtil.getAttractions()) {
@@ -165,6 +234,10 @@ public class RewardCentralService {
     logger.debug("Created " + internalTestHelper.getInternalUserNumber() + " internal test users.");
   }
 
+  /**
+   * @Description method for create random history visity
+   * @param user
+   */
   private void generateUserLocationHistory(User user) {
     if (user == null) {
       new RuntimeException("user is null");
@@ -174,26 +247,33 @@ public class RewardCentralService {
     });
   }
 
+  /**
+   * @Description method for generate random longitude
+   * @return
+   */
   private double generateRandomLongitude() {
     double leftLimit = -180;
     double rightLimit = 180;
     return leftLimit + new Random().nextDouble() * (rightLimit - leftLimit);
   }
 
+  /**
+   * @Description method for generate random latitude
+   * @return
+   */
   private double generateRandomLatitude() {
     double leftLimit = -85.05112878;
     double rightLimit = 85.05112878;
     return leftLimit + new Random().nextDouble() * (rightLimit - leftLimit);
   }
 
+  /**
+   * @Description method for generate random time since UTC
+   * @return
+   */
   private Date getRandomTime() {
     LocalDateTime localDateTime = LocalDateTime.now().minusDays(new Random().nextInt(30));
     return Date.from(localDateTime.toInstant(ZoneOffset.UTC));
   }
-  public  String test() {
-    return "message from proxy test";
-  }
-
-
 
 }
