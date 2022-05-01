@@ -1,3 +1,10 @@
+
+buildscript {
+  dependencies {
+    classpath "gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.22.1"
+  }
+}
+
 plugins {
   id 'org.springframework.boot' version '2.6.6'
   id 'io.spring.dependency-management' version '1.0.11.RELEASE'
@@ -40,6 +47,17 @@ dependencies {
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
   implementation name: 'gpsUtil'
   implementation name: 'TripPricer'
+}
+
+// docker: plugin apply
+apply plugin: 'com.palantir.docker'
+
+// docker: new task docker
+docker {
+  dependsOn build
+  name "${project.name}"
+  files bootJar.archivePath
+  buildArgs(['JAR_FILE': "${bootJar.archiveName}"])
 }
 
 dependencyManagement {
