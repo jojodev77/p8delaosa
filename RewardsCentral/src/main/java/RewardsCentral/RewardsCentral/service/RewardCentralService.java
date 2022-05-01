@@ -211,6 +211,10 @@ public class RewardCentralService {
     return nearbyAttractions;
   }
 
+  public void getPrice(User user, Attraction attraction) {
+    tripPricer.getPrice(tripPricerApiKey, attraction.attractionId, user.getUserPreferences().getNumberOfAdults(), user.getUserPreferences().getNumberOfChildren(),
+      2,rewardsCentral.getAttractionRewardPoints(attraction.attractionId, user.getUserId()));
+  }
 
 
   /**********************************************************************************

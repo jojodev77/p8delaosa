@@ -68,4 +68,10 @@ public class RewardServiceTest {
     assertEquals(gpsUtil.getAttractions().size(), userRewards.size());
   }
 
+  @Test
+  public void getPriceTest() {
+    GpsUtil gpsUtil = new GpsUtil();
+    RewardCentralService rewardsService = new RewardCentralService(gpsUtil, new RewardCentral());
+  }
+
 }

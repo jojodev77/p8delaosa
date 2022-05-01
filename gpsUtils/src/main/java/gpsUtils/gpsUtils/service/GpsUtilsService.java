@@ -10,8 +10,6 @@ import gpsUtils.gpsUtils.entity.User;
 import gpsUtils.gpsUtils.helper.InternalTestHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 import tripPricer.TripPricer;
 
@@ -42,17 +40,26 @@ public class GpsUtilsService {
     }
     addShutDownHook();
   }
+
+  /**
+   * @Description method for get visitedlocation since localisation from user
+   * @param user
+   * @return
+   */
   public VisitedLocation trackUserLocation(User user) {
     if (user == null) {
       new RuntimeException("user is null");
     }
-    System.out.println("---------------------------------" +  gpsUtil.getUserLocation(user.getUserId()));
     VisitedLocation visitedLocation = gpsUtil.getUserLocation(user.getUserId());
     user.addToVisitedLocations(visitedLocation);
-  //  rewardsService.calculateRewards(user);
     return visitedLocation;
   }
 
+  /**
+   *  @Description method for get localisation from user
+   * @param user
+   * @return
+   */
   public VisitedLocation getUserLocation(User user) {
     if (user == null) {
       new RuntimeException("User is null");
@@ -68,6 +75,11 @@ public class GpsUtilsService {
     }
   }
 
+  /**
+   * @Description method for get user
+   * @param userName
+   * @return
+   */
   public User getUser(String userName) {
     if (userName == null) {
       new RuntimeException("userName is null");
@@ -75,10 +87,18 @@ public class GpsUtilsService {
     return internalUserMap.get(userName);
   }
 
+  /**
+   * @Description method for  get list of user
+   * @return
+   */
   public List<User> getAllUsers() {
     return internalUserMap.values().stream().collect(Collectors.toList());
   }
 
+  /**
+   * @Description method for create user
+   * @param user
+   */
   public void addUser(User user) {
     if (user == null) {
       new RuntimeException("user is null");
@@ -89,6 +109,9 @@ public class GpsUtilsService {
   }
 
 
+  /**
+   * @Description method for started application
+   */
   private void addShutDownHook() {
     Runtime.getRuntime().addShutdownHook(new Thread() {
       public void run() {
@@ -97,16 +120,20 @@ public class GpsUtilsService {
     });
   }
 
+  /**
+   * @Description method for get position to near position to user
+   * @param visitedLocation
+   * @return
+   */
   public List<Attraction> getNearByAttractions(VisitedLocation visitedLocation) {
     List<Attraction> nearbyAttractions = new ArrayList<>();
     for(Attraction attraction : gpsUtil.getAttractions()) {
-    //  if(rewardsService.isWithinAttractionProximity(attraction, visitedLocation.location)) {
-    //    nearbyAttractions.add(attraction);
-    //  }
     }
 
     return nearbyAttractions;
   }
+
+
 
   /**********************************************************************************
    *
@@ -129,6 +156,10 @@ public class GpsUtilsService {
     logger.debug("Created " + internalTestHelper.getInternalUserNumber() + " internal test users.");
   }
 
+  /**
+   * @Description method for create random history visity
+   * @param user
+   */
   private void generateUserLocationHistory(User user) {
     if (user == null) {
       new RuntimeException("user is null");
@@ -138,18 +169,30 @@ public class GpsUtilsService {
     });
   }
 
+  /**
+   * @Description method for generate random longitude
+   * @return
+   */
   private double generateRandomLongitude() {
     double leftLimit = -180;
     double rightLimit = 180;
     return leftLimit + new Random().nextDouble() * (rightLimit - leftLimit);
   }
 
+  /**
+   * @Description method for generate random latitude
+   * @return
+   */
   private double generateRandomLatitude() {
     double leftLimit = -85.05112878;
     double rightLimit = 85.05112878;
     return leftLimit + new Random().nextDouble() * (rightLimit - leftLimit);
   }
 
+  /**
+   * @Description method for generate random time since UTC
+   * @return
+   */
   private Date getRandomTime() {
     LocalDateTime localDateTime = LocalDateTime.now().minusDays(new Random().nextInt(30));
     return Date.from(localDateTime.toInstant(ZoneOffset.UTC));
