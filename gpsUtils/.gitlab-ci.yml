@@ -1,0 +1,37 @@
+image: gpsUtil
+services:
+  - docker:gpsUtil
+
+variables:
+  DOCKER_DRIVER: overlay
+  SPRING_PROFILES_ACTIVE: gitlab-ci
+  USER_GITLAB: j.de-la-osa
+  APP_NAME: gpsUtil
+  REPO: p8delaosa
+
+stages:
+  - build
+  - test
+  - docker
+
+gradle-build:
+  image: openjdk:8
+  stage: build
+  script: "gradlew clean build"
+  artifacts:
+    paths:
+      - target/*.jar
+
+gradle-test:
+  image: openjdk:8
+  stage: test
+  script: "gradlew test"
+  artifacts:
+    paths:
+      - target/*.jar
+
+docker-build:
+  stage: docker
+  script:
+    - docker build --build-arg JAR_FILE="build/libs/*.jar" -t gpsUtil .
+    - docker run -p 8081:8081 gpsUtil
