@@ -1,0 +1,37 @@
+image: tourguideserver
+services:
+  - docker:tourguideserver
+
+variables:
+  DOCKER_DRIVER: overlay
+  SPRING_PROFILES_ACTIVE: gitlab-ci
+  USER_GITLAB: j.de-la-osa
+  APP_NAME: tourguideserver
+  REPO: p8delaosa
+
+stages:
+  - build
+  - test
+  - docker
+
+gradle-build:
+  image: openjdk:8
+  stage: build
+  script: "gradlew clean build"
+  artifacts:
+    paths:
+      - target/*.jar
+
+gradle-test:
+  image: openjdk:8
+  stage: test
+  script: "gradlew test"
+  artifacts:
+    paths:
+      - target/*.jar
+
+docker-build:
+  stage: docker
+  script:
+    - docker build --build-arg JAR_FILE="build/libs/*.jar" -t tourservicegateway .
+    - docker run -p 8083:8083 tourguideserver
