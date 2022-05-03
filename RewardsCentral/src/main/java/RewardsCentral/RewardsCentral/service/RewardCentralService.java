@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import rewardCentral.RewardCentral;
+import tripPricer.Provider;
 import tripPricer.TripPricer;
 
 import java.time.LocalDateTime;
@@ -211,8 +212,8 @@ public class RewardCentralService {
     return nearbyAttractions;
   }
 
-  public void getPrice(User user, Attraction attraction) {
-    tripPricer.getPrice(tripPricerApiKey, attraction.attractionId, user.getUserPreferences().getNumberOfAdults(), user.getUserPreferences().getNumberOfChildren(),
+  public List<Provider> getPrice(User user, Attraction attraction) {
+    return tripPricer.getPrice(tripPricerApiKey, attraction.attractionId, user.getUserPreferences().getNumberOfAdults(), user.getUserPreferences().getNumberOfChildren(),
       2,rewardsCentral.getAttractionRewardPoints(attraction.attractionId, user.getUserId()));
   }
 

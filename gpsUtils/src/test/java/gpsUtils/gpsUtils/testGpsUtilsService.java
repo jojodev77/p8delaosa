@@ -94,15 +94,16 @@ public class testGpsUtilsService {
     assertEquals(user.getUserId(), visitedLocation.userId);
   }
 
-  @Ignore // Not yet implemented
   @Test
   public void getNearbyAttractions() {
     GpsUtil gpsUtil = new GpsUtil();
-    internalTestHelper.setInternalUserNumber(0);
     GpsUtilsService tourGuideService = new GpsUtilsService(gpsUtil);
+    InternalTestHelper.setInternalUserNumber(0);
 
     User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
-    VisitedLocation visitedLocation = tourGuideService.trackUserLocation(user);
+  //  VisitedLocation visitedLocation = tourGuideService.trackUserLocation(user);
+    VisitedLocation visitedLocation = tourGuideService.getUserLocation(user);
+
 
     List<Attraction> attractions = tourGuideService.getNearByAttractions(visitedLocation);
 

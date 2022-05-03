@@ -29,6 +29,11 @@ public class GpsUtilsService {
   public final Tracker tracker = new Tracker();
   boolean testMode = true;
   InternalTestHelper internalTestHelper = new InternalTestHelper();
+  private static final double STATUTE_MILES_PER_NAUTICAL_MILE = 1.15077945;
+  // proximity in miles
+  private int defaultProximityBuffer = 10;
+  private int proximityBuffer = defaultProximityBuffer;
+  private int attractionProximityRange = 200;
 
   public GpsUtilsService(GpsUtil gpsUtil) {
     this.gpsUtil = gpsUtil;
@@ -108,6 +113,95 @@ public class GpsUtilsService {
     }
   }
 
+  /**
+   * @Description method for  indicates the distance to the nearest attraction
+   * @param proximityBuffer
+   */
+  public void setProximityBuffer(int proximityBuffer) {
+    this.proximityBuffer = proximityBuffer;
+  }
+
+  public void setDefaultProximityBuffer() {
+    proximityBuffer = defaultProximityBuffer;
+  }
+
+
+  /**
+   * @Description method to know if you are near an attraction
+   * @param visitedLocation
+   * @param attraction
+   * @return
+   */
+  private boolean nearAttraction(VisitedLocation visitedLocation, Attraction attraction) {
+    return getDistance(attraction, visitedLocation.location) > proximityBuffer ? false : true;
+  }
+  /**
+   * @Description method for calculate distance
+   * @param loc1
+   * @param loc2
+   * @return
+   */
+  public double getDistance(Location loc1, Location loc2) {
+    if (loc1 == null || loc2 == null) {
+      new RuntimeException("location is null");
+    }
+    double lat1 = Math.toRadians(loc1.latitude);
+    double lon1 = Math.toRadians(loc1.longitude);
+    double lat2 = Math.toRadians(loc2.latitude);
+    double lon2 = Math.toRadians(loc2.longitude);
+
+    double angle = Math.acos(Math.sin(lat1) * Math.sin(lat2)
+      + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon1 - lon2));
+
+    double nauticalMiles = 60 * Math.toDegrees(angle);
+    double statuteMiles = STATUTE_MILES_PER_NAUTICAL_MILE * nauticalMiles;
+    return statuteMiles;
+  }
+  /**
+   * @Description method for calcul distance of attrraction since user localization
+   * @param attraction
+   * @param location
+   * @return
+   */
+  public boolean isWithinAttractionProximity(Attraction attraction, Location location) {
+    if (attraction == null || location == null) {
+      new RuntimeException("attraction or location is null");
+    }
+    return getDistance(attraction, location) > attractionProximityRange ? false : true;
+  }
+
+  /**
+   * @Description method for calcul distance of attrraction since user localization latest
+   * @param attraction
+   * @param visitedLocation
+   * @return
+   */
+  public boolean isWithinAttractionProximityToStartedApplication(Attraction attraction, VisitedLocation visitedLocation) {
+    if (attraction == null || visitedLocation == null) {
+      new RuntimeException("attraction or visitedLocation is null");
+    }
+    return getDistance(attraction, visitedLocation.location) > attractionProximityRange ? true : true;
+  }
+
+  /**
+   * @Decsription method for get list of attraction to near
+   * @param visitedLocation
+   * @return
+   */
+  public List<Attraction> getNearByAttractions(VisitedLocation visitedLocation) {
+    List<Attraction> nearbyAttractions = new ArrayList<>();
+    for(Attraction attraction : gpsUtil.getAttractions()) {
+      if(isWithinAttractionProximityToStartedApplication(attraction, visitedLocation)) {
+        if (nearbyAttractions.size() < 5){
+          nearbyAttractions.add(attraction);
+        }
+
+      }
+    }
+
+    return nearbyAttractions;
+  }
+
 
   /**
    * @Description method for started application
@@ -125,13 +219,7 @@ public class GpsUtilsService {
    * @param visitedLocation
    * @return
    */
-  public List<Attraction> getNearByAttractions(VisitedLocation visitedLocation) {
-    List<Attraction> nearbyAttractions = new ArrayList<>();
-    for(Attraction attraction : gpsUtil.getAttractions()) {
-    }
 
-    return nearbyAttractions;
-  }
 
 
 

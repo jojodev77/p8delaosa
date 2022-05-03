@@ -68,10 +68,19 @@ public class RewardServiceTest {
     assertEquals(gpsUtil.getAttractions().size(), userRewards.size());
   }
 
+  @Ignore // Not yet implemented
+
+
   @Test
   public void getPriceTest() {
     GpsUtil gpsUtil = new GpsUtil();
     RewardCentralService rewardsService = new RewardCentralService(gpsUtil, new RewardCentral());
+    rewardsService.setProximityBuffer(Integer.MAX_VALUE);
+    Attraction attraction = gpsUtil.getAttractions().get(0);
+    InternalTestHelper.setInternalUserNumber(1);
+
+    rewardsService.getPrice(rewardsService.getAllUsers().get(0), attraction);
+    assertTrue(rewardsService.getPrice(rewardsService.getAllUsers().get(0), attraction).size() > 1);
   }
 
 }
