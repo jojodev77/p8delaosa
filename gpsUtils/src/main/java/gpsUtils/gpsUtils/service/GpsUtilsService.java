@@ -6,6 +6,7 @@ import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
 import gpsUtils.gpsUtils.Tracker.Tracker;
+import gpsUtils.gpsUtils.entity.AttractionParameters;
 import gpsUtils.gpsUtils.entity.User;
 import gpsUtils.gpsUtils.helper.InternalTestHelper;
 import org.slf4j.Logger;
@@ -188,12 +189,18 @@ public class GpsUtilsService {
    * @param visitedLocation
    * @return
    */
-  public List<Attraction> getNearByAttractions(VisitedLocation visitedLocation) {
-    List<Attraction> nearbyAttractions = new ArrayList<>();
+  public List<AttractionParameters> getNearByAttractions(VisitedLocation visitedLocation) {
+    List<AttractionParameters> nearbyAttractions = new ArrayList<>();
+    AttractionParameters ap = new AttractionParameters();
     for(Attraction attraction : gpsUtil.getAttractions()) {
       if(isWithinAttractionProximityToStartedApplication(attraction, visitedLocation)) {
         if (nearbyAttractions.size() < 5){
-          nearbyAttractions.add(attraction);
+          ap.setNameOfAttraction(attraction.attractionName);
+          ap.setDistanceUserAttraction((int) getDistance(attraction, visitedLocation.location));
+          ap.setUserPosition(visitedLocation.location);
+          ap.setAttractionPosition(attraction);
+          ap.setRewardPoint(3);
+          nearbyAttractions.add(ap);
         }
 
       }

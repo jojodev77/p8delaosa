@@ -75,16 +75,16 @@ public class RewardCentralService {
   }
 
   /**
-   * @Description method for  indicates the distance to the nearest attraction
-   * @param proximityBuffer
+   * @Description get user with userName
+   * @param userName
+   * @return
    */
-  public void setProximityBuffer(int proximityBuffer) {
-    this.proximityBuffer = proximityBuffer;
+  public User getUser(String userName) {
+    return internalUserMap.get(userName);
   }
 
-  public void setDefaultProximityBuffer() {
-    proximityBuffer = defaultProximityBuffer;
-  }
+
+
 
   /**
    * @Description method for calculate the number of rewards according to the places visited
@@ -163,6 +163,37 @@ public class RewardCentralService {
   }
 
   /**
+   *  @Description method for get localisation from user
+   * @param user
+   * @return
+   */
+  public VisitedLocation getUserLocation(User user) {
+    if (user == null) {
+      new RuntimeException("User is null");
+    }
+    try {
+      VisitedLocation visitedLocation = (user.getVisitedLocations().size() > 0) ?
+        user.getLastVisitedLocation() :
+        trackUserLocation(user);
+      logger.debug("visitedLocation");
+      return visitedLocation;
+    } finally {
+      logger.debug("visitedLocation");
+    }
+  }
+  /**
+   * @Description method for  indicates the distance to the nearest attraction
+   * @param proximityBuffer
+   */
+  public void setProximityBuffer(int proximityBuffer) {
+    this.proximityBuffer = proximityBuffer;
+  }
+
+  public void setDefaultProximityBuffer() {
+    proximityBuffer = defaultProximityBuffer;
+  }
+
+  /**
    * @Description method for calculate distance
    * @param loc1
    * @param loc2
@@ -212,7 +243,7 @@ public class RewardCentralService {
     return nearbyAttractions;
   }
 
-  public List<Provider> getPrice(User user, Attraction attraction) {
+  public List<Provider> getPriceOfReward(User user, Attraction attraction) {
     return tripPricer.getPrice(tripPricerApiKey, attraction.attractionId, user.getUserPreferences().getNumberOfAdults(), user.getUserPreferences().getNumberOfChildren(),
       2,rewardsCentral.getAttractionRewardPoints(attraction.attractionId, user.getUserId()));
   }

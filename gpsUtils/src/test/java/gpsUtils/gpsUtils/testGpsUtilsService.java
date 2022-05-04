@@ -3,6 +3,7 @@ package gpsUtils.gpsUtils;
 import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
+import gpsUtils.gpsUtils.entity.AttractionParameters;
 import gpsUtils.gpsUtils.entity.User;
 import gpsUtils.gpsUtils.helper.InternalTestHelper;
 import gpsUtils.gpsUtils.service.GpsUtilsService;
@@ -105,7 +106,7 @@ public class testGpsUtilsService {
     VisitedLocation visitedLocation = tourGuideService.getUserLocation(user);
 
 
-    List<Attraction> attractions = tourGuideService.getNearByAttractions(visitedLocation);
+    List<AttractionParameters> attractions = tourGuideService.getNearByAttractions(visitedLocation);
 
     tourGuideService.tracker.stopTracking();
 

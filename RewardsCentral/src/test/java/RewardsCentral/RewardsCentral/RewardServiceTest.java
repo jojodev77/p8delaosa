@@ -79,8 +79,8 @@ public class RewardServiceTest {
     Attraction attraction = gpsUtil.getAttractions().get(0);
     InternalTestHelper.setInternalUserNumber(1);
 
-    rewardsService.getPrice(rewardsService.getAllUsers().get(0), attraction);
-    assertTrue(rewardsService.getPrice(rewardsService.getAllUsers().get(0), attraction).size() > 1);
+    rewardsService.getPriceOfReward(rewardsService.getAllUsers().get(0), attraction);
+    assertTrue(rewardsService.getPriceOfReward(rewardsService.getAllUsers().get(0), attraction).size() > 1);
   }
 
 }
