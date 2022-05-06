@@ -21,6 +21,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestPerformance {
 
+  /**
+   * @Description test of performance for 100000 user
+   */
   @Ignore
   @Test
   public void highVolumeGetRewards() {

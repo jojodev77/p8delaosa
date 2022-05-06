@@ -73,7 +73,7 @@ public class testGpsUtilsService {
     tourGuideService.addUser(user);
     tourGuideService.addUser(user2);
 
-    List<User> allUsers = tourGuideService.getAllUsers();
+    List<User> allUsers = (List<User>) tourGuideService.getAllUsers();
 
     tourGuideService.tracker.stopTracking();
 
@@ -102,7 +102,6 @@ public class testGpsUtilsService {
     InternalTestHelper.setInternalUserNumber(0);
 
     User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
-  //  VisitedLocation visitedLocation = tourGuideService.trackUserLocation(user);
     VisitedLocation visitedLocation = tourGuideService.getUserLocation(user);
 
 
@@ -111,6 +110,19 @@ public class testGpsUtilsService {
     tourGuideService.tracker.stopTracking();
 
     assertEquals(5, attractions.size());
+  }
+
+  @Test
+  public void gestLastVisitedLocation() {
+    GpsUtil gpsUtil = new GpsUtil();
+    GpsUtilsService tourGuideService = new GpsUtilsService(gpsUtil);
+    InternalTestHelper.setInternalUserNumber(0);
+
+    User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
+    VisitedLocation visitedLocation = tourGuideService.trackUserLocation(user);
+
+    tourGuideService.tracker.stopTracking();
+    assertTrue(user.getLastVisitedLocation().location != null);
   }
 
 

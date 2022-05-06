@@ -45,7 +45,7 @@ public class Tracker extends Thread {
         break;
       }
 
-      List<User> users = gpsUtilsService.getAllUsers();
+      List<User> users = (List<User>) gpsUtilsService.getAllUsers();
       logger.debug("Begin Tracker. Tracking " + users.size() + " users.");
       stopWatch.start();
       users.forEach(u -> gpsUtilsService.trackUserLocation(u));

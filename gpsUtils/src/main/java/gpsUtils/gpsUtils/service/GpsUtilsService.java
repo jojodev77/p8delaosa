@@ -1,6 +1,7 @@
 package gpsUtils.gpsUtils.service;
 
 
+import com.google.common.collect.Lists;
 import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
@@ -11,12 +12,17 @@ import gpsUtils.gpsUtils.entity.User;
 import gpsUtils.gpsUtils.helper.InternalTestHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import tripPricer.TripPricer;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -97,10 +103,32 @@ public class GpsUtilsService {
    * @Description method for  get list of user
    * @return
    */
+  @Async
   public List<User> getAllUsers() {
-    return internalUserMap.values().stream().collect(Collectors.toList());
-  }
+    List<CompletableFuture<List<User>>> futures = internalUserMap.values().stream()
+      .map(item -> CompletableFuture.supplyAsync(() -> getUser(item)))
+      .collect(Collectors.toList());
 
+
+
+    return futures.stream()
+      .map(CompletableFuture::join)
+      .flatMap(List::stream)
+      .collect(Collectors.toList());
+  }
+  private List<User> getUser(User item) {
+    try {
+      // Simulate a call to some external resource
+      // by sleeping for a second
+      System.out.println("Start: " + item);
+      Thread.sleep(1000);
+      System.out.println("End: " + item);
+      return Lists.newArrayList(item);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return new ArrayList<>();
+  }
   /**
    * @Description method for create user
    * @param user
