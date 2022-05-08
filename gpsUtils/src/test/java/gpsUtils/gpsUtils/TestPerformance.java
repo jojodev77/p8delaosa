@@ -36,16 +36,16 @@ public class TestPerformance {
     GpsUtil gpsUtil = new GpsUtil();
     // Users should be incremented up to 100,000, and test finishes within 15 minutes
     InternalTestHelper internalTestHelper = new InternalTestHelper();
-    internalTestHelper.setInternalUserNumber(100);
+    internalTestHelper.setInternalUserNumber(1000);
     GpsUtilsService tourGuideService = new GpsUtilsService(gpsUtil);
 
     List<User> allUsers = new ArrayList<>();
-    allUsers = (List<User>) tourGuideService.getAllUsers();
+    allUsers =  tourGuideService.getS();
 
     StopWatch stopWatch = new StopWatch();
     stopWatch.start();
     for(User user : allUsers) {
-      tourGuideService.trackUserLocation(user);
+      tourGuideService.trackListUserLocation(user);
     }
     stopWatch.stop();
     tourGuideService.tracker.stopTracking();

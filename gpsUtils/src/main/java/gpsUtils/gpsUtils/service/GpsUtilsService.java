@@ -19,12 +19,11 @@ import tripPricer.TripPricer;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import static java.util.stream.Collectors.toList;
 
 
 @Service
@@ -62,10 +61,20 @@ public class GpsUtilsService {
     if (user == null) {
       new RuntimeException("user is null");
     }
+    ForkJoinPool forkJoinPool = new ForkJoinPool();
+
     VisitedLocation visitedLocation = gpsUtil.getUserLocation(user.getUserId());
-    user.addToVisitedLocations(visitedLocation);
+    forkJoinPool.submit(() ->  user.addToVisitedLocations(visitedLocation));
     return visitedLocation;
   }
+
+  public void trackListUserLocation(User user) throws InterruptedException {
+    ExecutorService executorService = Executors.newFixedThreadPool(45);
+      Runnable runnable = () -> {
+        trackUserLocation(user);
+      };
+      executorService.execute(runnable);
+    }
 
   /**
    *  @Description method for get localisation from user
@@ -103,32 +112,48 @@ public class GpsUtilsService {
    * @Description method for  get list of user
    * @return
    */
-  @Async
+
   public List<User> getAllUsers() {
+    return internalUserMap.values().stream().collect(Collectors.toList());
+  }
+
+
+public  List<User> getS() {
+  ExecutorService executorService = Executors.newFixedThreadPool(45);
+    Runnable runnable = () -> {
+     getAllUsersTest();
+    };
+    executorService.execute(runnable);
+    return getAllUsersTest();
+  }
+
+
+  /**
+   * @Description method for  get list of user
+   * @return
+   */
+  @Async
+  public List<User> getAllUsersTest() {
+    ExecutorService executorService = Executors.newFixedThreadPool(10);
+    List<User> lu = new ArrayList<>();
     List<CompletableFuture<List<User>>> futures = internalUserMap.values().stream()
       .map(item -> CompletableFuture.supplyAsync(() -> getUser(item)))
-      .collect(Collectors.toList());
-
-
+      .collect(toList());
 
     return futures.stream()
       .map(CompletableFuture::join)
       .flatMap(List::stream)
-      .collect(Collectors.toList());
+      .collect(toList());
   }
   private List<User> getUser(User item) {
     try {
-      // Simulate a call to some external resource
-      // by sleeping for a second
-      System.out.println("Start: " + item);
-      Thread.sleep(1000);
-      System.out.println("End: " + item);
       return Lists.newArrayList(item);
     } catch (Exception e) {
       e.printStackTrace();
     }
     return new ArrayList<>();
   }
+
   /**
    * @Description method for create user
    * @param user
